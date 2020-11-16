@@ -147,6 +147,7 @@
 	          <configuration>
 	            <excludes>
 	              <exclude>**/*Application.*</exclude>
+	              <exclude>**/*Repository.*</exclude>
 	              <exclude>**/model/*</exclude>
 	            </excludes>
 	          </configuration>
