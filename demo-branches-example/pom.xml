@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.11.RELEASE</version>
+		<version>2.1.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.examples</groupId>
@@ -16,6 +16,32 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		
+		
+	    <!-- For SonarQube -->
+        <sonar.projectKey>alessandro-feri_demo-branches-example</sonar.projectKey>
+		<sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
+
+        <sonar.coverage.jacoco.xmlReportPaths>
+          ${project.reporting.outputDirectory}/jacoco/jacoco.xml
+        </sonar.coverage.jacoco.xmlReportPaths>
+        <!-- Also collects integration tests -->
+        <sonar.junit.reportPaths>
+          ${project.build.directory}/surefire-reports,
+          ${project.build.directory}/failsafe-reports
+        </sonar.junit.reportPaths>
+        <!-- Also scans HTML files -->
+        <sonar.sources>
+          pom.xml,
+          ${project.build.sourceDirectory},
+          ${basedir}/src/main/resources
+        </sonar.sources>
+        <!-- Exclude non covered files  -->
+        <sonar.coverage.exclusions>
+          **/*Application.*,
+          **/*Repository.*,
+          **/model/*
+        </sonar.coverage.exclusions>
 	</properties>
 
 	<dependencies>
@@ -112,6 +138,67 @@
         		</executions>
       		</plugin>
 		</plugins>
-	</build>
+		<pluginManagement>
+	      <plugins>
+	        <plugin>
+	          <groupId>org.jacoco</groupId>
+	          <artifactId>jacoco-maven-plugin</artifactId>
+	          <version>0.8.5</version>
+	          <configuration>
+	            <excludes>
+	              <exclude>**/*Application.*</exclude>
+	              <exclude>**/*Repository.*</exclude>
+	              <exclude>**/model/*</exclude>
+	            </excludes>
+	          </configuration>
+	          <executions>
+	            <execution>
+                  <configuration>
+	                <propertyName>surefireArgLine</propertyName>
+	              </configuration>  
+	              <goals>
+	                <goal>prepare-agent</goal>
+	                <goal>report</goal>
+	              </goals>
+	            </execution>
+	          </executions>
+	        </plugin>
+            <plugin>
+	          <groupId>org.apache.maven.plugins</groupId>
+	          <artifactId>maven-surefire-plugin</artifactId>
+	          <configuration>
+	            <argLine>${surefireArgLine}</argLine>
+	          </configuration>
+	        </plugin> 
+	        <plugin>
+	          <groupId>org.eluder.coveralls</groupId>
+	          <artifactId>coveralls-maven-plugin</artifactId>
+	          <version>4.3.0</version>
+	        </plugin>
+	        <plugin>
+	          <groupId>org.sonarsource.scanner.maven</groupId>
+	          <artifactId>sonar-maven-plugin</artifactId>
+	          <version>3.7.0.1746</version>
+	        </plugin>
+	      </plugins> 
+	    </pluginManagement>
+	  </build>
+	
+	<profiles>
+	  <profile>
+	    <id>jacoco</id>
+	    <activation>
+	      <activeByDefault>false</activeByDefault>
+	    </activation>
+	    <build>
+	      <plugins>
+	        <plugin>
+	          <groupId>org.jacoco</groupId>
+	          <artifactId>jacoco-maven-plugin</artifactId>
+	        </plugin>
+	      </plugins>
+	    </build>
+	  </profile>
+	</profiles>
 
 </project>
