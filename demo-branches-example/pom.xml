@@ -42,6 +42,16 @@
           **/*Repository.*,
           **/model/*
         </sonar.coverage.exclusions>
+        <sonar.issue.ignore.multicriteria>e11</sonar.issue.ignore.multicriteria>
+      <!-- "Tests should include assertions" disabled on some classes like 
+        *ApplicationTests which just checks that the Spring application can start, 
+        without any assertion -->
+      <sonar.issue.ignore.multicriteria.e11.ruleKey>
+        java:S2699
+      </sonar.issue.ignore.multicriteria.e11.ruleKey>
+      <sonar.issue.ignore.multicriteria.e11.resourceKey>
+        **/*ApplicationTests.java
+      </sonar.issue.ignore.multicriteria.e11.resourceKey>
 	</properties>
 
 	<dependencies>
